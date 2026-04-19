@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Profile · Decision Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <style>
+      :root{ --accent: {{ r.color }}; }
+    </style>
+  </head>
+  <body class="result-body">
+    <div class="result-ocean-bg">
+      <div class="wave rw1"></div>
+      <div class="wave rw2"></div>
+    </div>
+
+    <div class="result-wrap">
+      <div class="r-header">
+        <div class="r-icon">{{ r.icon }}</div>
+        <p class="r-eyebrow">Your Cognitive Profile</p>
+        <h1 class="r-title">{{ r.style }}</h1>
+        <p class="r-tagline">{{ r.tagline }}</p>
+      </div>
+
+      <!-- Score Breakdown -->
+      <div class="r-card">
+        <h3 class="r-card-title">Score Breakdown</h3>
+        <div class="bars">
+          <div class="bar-row">
+            <span class="bar-lbl">🧠 Logical</span>
+            <div class="bar-track">
+              <div class="bar-fill bar-l" data-w="{{ r.logical_pct }}"></div>
+            </div>
+            <span class="bar-pct">{{ r.logical_pct }}%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-lbl">🌸 Emotional</span>
+            <div class="bar-track">
+              <div class="bar-fill bar-e" data-w="{{ r.emotional_pct }}"></div>
+            </div>
+            <span class="bar-pct">{{ r.emotional_pct }}%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-lbl">🌿 Balanced</span>
+            <div class="bar-track">
+              <div class="bar-fill bar-b" data-w="{{ r.balanced_pct }}"></div>
+            </div>
+            <span class="bar-pct">{{ r.balanced_pct }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Confidence -->
+      <div class="r-card">
+        <h3 class="r-card-title">Model Confidence</h3>
+        <div class="conf-grid">
+          {% for label, pct in r.confidence.items() %}
+          <div
+            class="conf-item {% if label == r.style %}conf-active{% endif %}"
+          >
+            <span class="conf-lbl">{{ label }}</span>
+            <span class="conf-pct">{{ pct }}%</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Strengths -->
+      <div class="r-card">
+        <h3 class="r-card-title">✦ Your Strengths</h3>
+        <ul class="r-list">
+          {% for s in r.strengths %}
+          <li>{{ s }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Blind Spots -->
+      <div class="r-card">
+        <h3 class="r-card-title">△ Blind Spots</h3>
+        <ul class="r-list warn">
+          {% for b in r.blind_spots %}
+          <li>{{ b }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Recommendation -->
+      <div class="r-card rec-card">
+        <h3 class="r-card-title">◎ Recommendation</h3>
+        <p class="rec-txt">{{ r.recommendation }}</p>
+      </div>
+
+      <!-- Viva -->
+      <div class="r-card viva-card">
+        <p class="viva">
+          "This system goes beyond classification — it incorporates behavioral
+          analysis and insight generation, making it a
+          <strong>cognitive intelligence system.</strong>"
+        </p>
+      </div>
+
+      <a href="/" class="btn-retake">↺ Retake Analysis</a>
+    </div>
+
+    <script>
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          document.querySelectorAll(".bar-fill").forEach((b) => {
+            b.style.width = b.dataset.w + "%";
+          });
+        }, 150);
+      });
+    </script>
+  </body>
+</html>
